@@ -20,7 +20,7 @@ class FlightsViewModel : ViewModel() {
             duration = "2h 15m",
             gate = "A12",
             status = "CONFIRMED",
-            securityVerified = true
+            securityVerified = true,
         )
     )
 

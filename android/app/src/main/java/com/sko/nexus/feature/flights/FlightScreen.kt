@@ -334,7 +334,11 @@ fun FlightsScreen(
                         .size(48.dp)
                         .clip(CircleShape)
                         .background(
-                            Color(0xFFE8F5E9)
+                            if (flight?.securityVerified == true) {
+                                Color(0xFFE8F5E9)
+                            } else {
+                                Color(0xFFFFEBEE)
+                            }
                         ),
                     contentAlignment =
                         Alignment.Center
@@ -344,7 +348,11 @@ fun FlightsScreen(
                         imageVector =
                             Icons.Default.Security,
                         contentDescription = null,
-                        tint = SkoSuccess,
+                        tint = if (flight?.securityVerified == true) {
+                            SkoSuccess
+                        } else {
+                            Color.Red
+                        },
                         modifier = Modifier.size(25.dp)
                     )
                 }
