@@ -1,5 +1,6 @@
 package com.sko.nexus.core.navigation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,11 +28,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.sko.nexus.feature.flights.FlightsScreen
-import com.sko.nexus.feature.voyages.VoyagesScreen
 import com.sko.nexus.feature.auth.LoginScreen
 import com.sko.nexus.feature.auth.RegisterScreen
 import com.sko.nexus.feature.dashboard.DashboardScreen
+import com.sko.nexus.feature.flights.FlightsScreen
+import com.sko.nexus.feature.voyages.VoyagesScreen
 import com.sko.nexus.feature.welcome.WelcomeScreen
 
 
@@ -62,11 +63,13 @@ fun AppNavigation() {
 
 
     // Show bottom navigation only after login
-    val showBottomBar = currentRoute == Routes.DASHBOARD ||
-            currentRoute == Routes.FLIGHTS ||
-            currentRoute == Routes.VOYAGES ||
-            currentRoute == Routes.BOOKINGS ||
-            currentRoute == Routes.PROFILE
+
+    val showBottomBar =
+        currentRoute == Routes.DASHBOARD ||
+                currentRoute == Routes.FLIGHTS ||
+                currentRoute == Routes.VOYAGES ||
+                currentRoute == Routes.BOOKINGS ||
+                currentRoute == Routes.PROFILE
 
 
     Scaffold(
@@ -79,7 +82,13 @@ fun AppNavigation() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(
-                            RoundedCornerShape(22.dp)
+                            RoundedCornerShape(
+                                topStart = 22.dp,
+                                topEnd = 22.dp
+                            )
+                        )
+                        .background(
+                            Color(0xFF7FCBDE)
                         )
                         .padding(
                             vertical = 12.dp,
@@ -90,7 +99,9 @@ fun AppNavigation() {
                         Arrangement.SpaceEvenly
                 ) {
 
-                    // Dashboard
+                    // =========================
+                    // DASHBOARD
+                    // =========================
 
                     NavigationItem(
                         icon = Icons.Default.Home,
@@ -110,7 +121,9 @@ fun AppNavigation() {
                     )
 
 
-                    // Flights
+                    // =========================
+                    // FLIGHTS
+                    // =========================
 
                     NavigationItem(
                         icon =
@@ -133,7 +146,9 @@ fun AppNavigation() {
                     )
 
 
-                    // Voyages
+                    // =========================
+                    // VOYAGES
+                    // =========================
 
                     NavigationItem(
                         icon = Icons.Default.Sailing,
@@ -155,7 +170,9 @@ fun AppNavigation() {
                     )
 
 
-                    // Bookings
+                    // =========================
+                    // BOOKINGS
+                    // =========================
 
                     NavigationItem(
                         icon =
@@ -178,7 +195,9 @@ fun AppNavigation() {
                     )
 
 
-                    // Profile
+                    // =========================
+                    // PROFILE
+                    // =========================
 
                     NavigationItem(
                         icon = Icons.Default.Person,
@@ -314,6 +333,7 @@ fun AppNavigation() {
             // =========================
 
             composable(Routes.FLIGHTS) {
+
                 FlightsScreen()
             }
 
@@ -323,6 +343,7 @@ fun AppNavigation() {
             // =========================
 
             composable(Routes.VOYAGES) {
+
                 VoyagesScreen()
             }
 
@@ -376,11 +397,13 @@ private fun NavigationItem(
 
     val color = if (selected) {
 
-        Color(0xFF42A5F5)
+        Color(0xFF0D47A1)
 
     } else {
 
-        Color(0xFF5F7D8A)
+        Color.White.copy(
+            alpha = 0.75f
+        )
     }
 
 
