@@ -28,6 +28,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.sko.nexus.feature.flights.FlightsScreen
+import com.sko.nexus.feature.voyages.VoyagesScreen
 import com.sko.nexus.feature.auth.LoginScreen
 import com.sko.nexus.feature.auth.RegisterScreen
 import com.sko.nexus.feature.dashboard.DashboardScreen
@@ -322,12 +323,7 @@ fun AppNavigation() {
             // =========================
 
             composable(Routes.VOYAGES) {
-
-                SimpleScreen(
-                    title = "Voyages",
-                    subtitle =
-                        "Explore your cruise and voyage information."
-                )
+                VoyagesScreen()
             }
 
 

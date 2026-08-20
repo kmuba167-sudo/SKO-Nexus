@@ -24,6 +24,13 @@ class FlightsViewModel : ViewModel() {
         )
     )
 
-    val upcomingFlight: StateFlow<Flight?> =
+    val upcomingFlight: StateFlow<Flight> =
         _upcomingFlight.asStateFlow()
+
+    fun setSecurityVerified(verified: Boolean) {
+        _upcomingFlight.value =
+            _upcomingFlight.value.copy(
+                securityVerified = verified
+            )
+    }
 }
