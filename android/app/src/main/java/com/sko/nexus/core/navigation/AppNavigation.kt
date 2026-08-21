@@ -34,8 +34,15 @@ import com.sko.nexus.feature.dashboard.DashboardScreen
 import com.sko.nexus.feature.flights.FlightsScreen
 import com.sko.nexus.feature.voyages.VoyagesScreen
 import com.sko.nexus.feature.welcome.WelcomeScreen
-
-
+import com.sko.nexus.feature.bookings.BookingsScreen
+import com.sko.nexus.feature.bookings.BookingDetailsScreen
+import com.sko.nexus.feature.bookings.BookingsViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.collectAsState
+import com.sko.nexus.feature.profile.ProfileScreen
+import androidx.compose.ui.platform.LocalContext
+import com.sko.nexus.feature.identity.BiometricAuthenticator
+import com.sko.nexus.feature.identity.IdentityViewModel
 object Routes {
 
     const val WELCOME = "welcome"
@@ -46,6 +53,7 @@ object Routes {
     const val FLIGHTS = "flights"
     const val VOYAGES = "voyages"
     const val BOOKINGS = "bookings"
+    const val BOOKING_DETAILS = "booking_details"
     const val PROFILE = "profile"
 }
 
@@ -54,6 +62,17 @@ object Routes {
 fun AppNavigation() {
 
     val navController = rememberNavController()
+    val context = LocalContext.current
+
+    val activity = context as? androidx.fragment.app.FragmentActivity
+    val biometricAuthenticator =
+        activity?.let {
+            BiometricAuthenticator(it)
+        }
+
+    val bookingsViewModel: BookingsViewModel = viewModel()
+
+    val identityViewModel: IdentityViewModel = viewModel()
 
     val navBackStackEntry =
         navController.currentBackStackEntryAsState()
@@ -354,30 +373,72 @@ fun AppNavigation() {
 
             composable(Routes.BOOKINGS) {
 
-                SimpleScreen(
-                    title = "Bookings",
-                    subtitle =
-                        "View and manage your bookings."
+                BookingsScreen(
+                    onBookingClick = { booking ->
+                        bookingsViewModel.selectBooking(booking)
+                        navController.navigate(Routes.BOOKING_DETAILS)
+                    }
                 )
             }
 
 
             // =========================
-            // PROFILE
+            // BOOKING DETAILS
             // =========================
+
+            composable(Routes.BOOKING_DETAILS) {
+
+                val bookingState =
+                    bookingsViewModel.booking.collectAsState()
+
+                BookingDetailsScreen(
+                    booking = bookingState.value,
+                    onBackClick = {
+                        navController.popBackStack()
+                    },
+                    onVerifyPassengerClick = {
+                        bookingsViewModel.setSecurityVerified(true)
+                    }
+                )
+            }
+
+
+            // =========================
+// PROFILE
+// =========================
 
             composable(Routes.PROFILE) {
 
-                SimpleScreen(
-                    title = "Profile",
-                    subtitle =
-                        "Manage your passenger profile."
+                val identityVerified =
+                    identityViewModel.identityVerified.collectAsState()
+
+                ProfileScreen(
+                    identityVerified = identityVerified.value,
+
+                    onVerifyIdentityClick = {
+
+                        biometricAuthenticator?.let { authenticator ->
+
+                            if (authenticator.canAuthenticate()) {
+
+                                authenticator.authenticate(
+
+                                    onSuccess = {
+                                        identityViewModel.markIdentityVerified()
+                                    },
+
+                                    onError = {
+                                        // Authentication failed or cancelled
+                                    }
+                                )
+                            }
+                        }
+                    }
                 )
             }
         }
     }
 }
-
 
 // =====================================
 // BOTTOM NAVIGATION ITEM
